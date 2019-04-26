@@ -8,7 +8,6 @@ function Board:init()
     self._anchorX, self._anchorY = 0, 0
     self._currentCollider = nil
     self._possibleMoves = {}
-    self._moves = {[1] = {}, [2] = {}}
 
     for i = 1, 8 do
         self._matrix[i] = {}
@@ -72,6 +71,9 @@ function Board:update(dt)
     if (#self._possibleMoves == 0) then
         CURRENT_PLAYER_TURN = CURRENT_PLAYER_TURN == 1 and 2 or 1
         self:getAllPossibleMoves()
+        if (#self._possibleMoves == 0) then
+            
+        end
     end
 
     for i = 1, 8 do

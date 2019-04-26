@@ -4,3 +4,4 @@ require("src/Utils")
 Class = require("lib/class")
 
 require("src/Collider")
+require("src/Board")

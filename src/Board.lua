@@ -72,7 +72,7 @@ function Board:update(dt)
         CURRENT_PLAYER_TURN = CURRENT_PLAYER_TURN == 1 and 2 or 1
         self:getAllPossibleMoves()
         if (#self._possibleMoves == 0) then
-            gStateMachine:change("victory", {winner = self:getWinner()})
+            gStateMachine:change("victory", self:getWinner())
         end
     end
 
@@ -89,7 +89,6 @@ function Board:update(dt)
                 if (love.mouse.wasPressed(1) and belongsTo(self._possibleMoves, {i, j})) then
                     self._matrix[i][j] = CURRENT_PLAYER_TURN
                     self:turnOverAt(i, j)
-                    gStateMachine:change("victory", self:getWinner())
                     CURRENT_PLAYER_TURN = CURRENT_PLAYER_TURN == 1 and 2 or 1
                     self._possibleMoves = {}
                     self:getAllPossibleMoves()

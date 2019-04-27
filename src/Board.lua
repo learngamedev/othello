@@ -72,7 +72,7 @@ function Board:update(dt)
         CURRENT_PLAYER_TURN = CURRENT_PLAYER_TURN == 1 and 2 or 1
         self:getAllPossibleMoves()
         if (#self._possibleMoves == 0) then
-            
+            gStateMachine:change("victory", {winner = self:getWinner()})
         end
     end
 
@@ -89,6 +89,7 @@ function Board:update(dt)
                 if (love.mouse.wasPressed(1) and belongsTo(self._possibleMoves, {i, j})) then
                     self._matrix[i][j] = CURRENT_PLAYER_TURN
                     self:turnOverAt(i, j)
+                    gStateMachine:change("victory", self:getWinner())
                     CURRENT_PLAYER_TURN = CURRENT_PLAYER_TURN == 1 and 2 or 1
                     self._possibleMoves = {}
                     self:getAllPossibleMoves()
@@ -149,7 +150,9 @@ function Board:turnOverAt(row, column)
         if (self._matrix[row][i] == CURRENT_PLAYER_TURN) then
             if (not first) then
                 first = i
-            else last = i end
+            else
+                last = i
+            end
         elseif (self._matrix[row][i] == 0) then
             first, last = nil, nil
         end
@@ -166,7 +169,9 @@ function Board:turnOverAt(row, column)
         if (self._matrix[i][column] == CURRENT_PLAYER_TURN) then
             if (not first) then
                 first = i
-            else last = i end
+            else
+                last = i
+            end
         elseif (self._matrix[i][column] == 0) then
             first, last = nil, nil
         end
@@ -177,4 +182,28 @@ function Board:turnOverAt(row, column)
             end
         end
     end
+end
+
+function Board:getWinner()
+    local player1Moves, player2Moves = 0, 0
+    for i = 1, 8 do
+        for j = 1, 8 do
+            if (self._matrix[i][j] == 1) then
+                player1Moves = player1Moves + 1
+            elseif (self._matrix[i][j] == 2) then
+                player2Moves = player2Moves + 1
+            end
+        end
+    end
+
+    local result = {["player1Moves"] = player1Moves, ["player2Moves"] = player2Moves}
+    if (player1Moves > player2Moves) then
+        result.winner = 1
+        return result
+    elseif (player2Moves > player1Moves) then
+        result.winner = 2
+        return result
+    end
+    result.winner = "draw"
+    return result
 end

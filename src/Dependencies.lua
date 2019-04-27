@@ -5,3 +5,8 @@ Class = require("lib/class")
 
 require("src/Collider")
 require("src/Board")
+
+require("src/StateMachine")
+require("src/States/BaseState")
+require("src/States/PlayState")
+require("src/States/VictoryState")
